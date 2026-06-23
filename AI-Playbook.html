@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html id="root" dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Playbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08101E;--surface:#0D1829;--surface2:#111f35;--border:#1a2d47;
+  --text:#E8F0FE;--muted:#6B8CB8;--accent:#00C8FF;
+  --c1:#6366F1;--c1l:#1e1b4b;--c2:#10B981;--c2l:#052e1c;
+  --c3:#F59E0B;--c3l:#291c00;--c4:#EF4444;--c4l:#2a0b0b;
+  --c5:#A855F7;--c5l:#1e0a2e;--c6:#3B82F6;--c6l:#0a1a36;
+  --radius:14px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);line-height:1.65;min-height:100vh;font-family:'Heebo',sans-serif}
+body.ltr{font-family:'Inter','Space Grotesk',sans-serif}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(8,16,30,.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 20px;display:flex;align-items:stretch;gap:4px;overflow-x:auto;scrollbar-width:none}
+.nav-inner::-webkit-scrollbar{display:none}
+.brand{display:flex;align-items:center;gap:10px;padding:14px 0;white-space:nowrap}
+.brand-icon{font-size:22px}
+.brand-name{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.5px}
+[dir="rtl"] .brand{margin-left:20px;border-left:1px solid var(--border);padding-left:20px}
+[dir="ltr"] .brand{margin-right:20px;border-right:1px solid var(--border);padding-right:20px}
+
+.tab{display:flex;align-items:center;gap:7px;padding:14px 15px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border:none;background:none;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;font-family:inherit}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--text);border-bottom-color:var(--current-color,var(--accent))}
+
+.lang-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:var(--text);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit;transition:all .2s;margin-top:auto;margin-bottom:auto}
+.lang-btn:hover{background:rgba(255,255,255,.13)}
+[dir="rtl"] .lang-btn{margin-right:auto}
+[dir="ltr"] .lang-btn{margin-left:auto}
+
+.pdf-btn{display:flex;align-items:center;gap:7px;padding:7px 14px;background:rgba(0,200,255,.08);border:1px solid rgba(0,200,255,.25);border-radius:8px;color:var(--accent);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit;transition:all .2s;margin-top:auto;margin-bottom:auto}
+.pdf-btn:hover{background:rgba(0,200,255,.18)}
+
+/* HERO */
+.hero{max-width:1100px;margin:0 auto;padding:72px 20px 36px}
+.hero-eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:18px;padding:5px 14px;border:1px solid rgba(0,200,255,.3);border-radius:20px;background:rgba(0,200,255,.05)}
+.hero h1{font-size:clamp(34px,5vw,62px);font-weight:900;line-height:1.15;color:#fff;margin-bottom:18px}
+.hero h1 span{color:var(--accent)}
+.hero p{font-size:17px;color:var(--muted);max-width:560px;margin-bottom:32px}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap}
+.stat-num{font-size:28px;font-weight:900;color:var(--accent);display:block}
+.stat-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+
+/* CONTENT */
+.content{display:none}
+.content.active{display:block}
+
+/* SECTIONS */
+.sections{max-width:1100px;margin:0 auto;padding:0 20px 80px}
+.section{animation:fadeIn .4s ease}
+.section+.section{margin-top:56px;padding-top:16px;border-top:1px solid var(--border)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.section-hero{border-radius:var(--radius);padding:40px;margin-bottom:32px;position:relative;overflow:hidden}
+.section-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.04) 0%,transparent 60%)}
+.section-hero-inner{position:relative;z-index:1}
+.section-icon{font-size:48px;margin-bottom:14px;display:block}
+.section-title{font-size:30px;font-weight:900;color:#fff;margin-bottom:8px}
+.section-sub{font-size:15px;color:rgba(255,255,255,.6);max-width:640px}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:24px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:24px}
+
+.tool-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;transition:all .2s}
+.tool-card:hover{border-color:var(--current-color,var(--accent));background:var(--surface2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.3)}
+.tool-name{font-size:14px;font-weight:700;color:#fff;margin-bottom:7px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700;background:var(--current-color,var(--accent));color:#000;opacity:.9;text-transform:uppercase;letter-spacing:.4px}
+.tool-desc{font-size:13px;color:var(--muted);line-height:1.6}
+.tool-link{font-size:11px;color:var(--current-color,var(--accent));margin-top:7px;display:block;opacity:.75;font-family:monospace}
+
+.block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:26px;margin-bottom:18px}
+.block-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:16px;display:flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.4px}
+.block-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.steps{display:flex;flex-direction:column}
+.step{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border)}
+.step:last-child{border-bottom:none}
+.step-num{width:30px;height:30px;min-width:30px;border-radius:50%;background:var(--current-color,var(--accent));color:#000;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.step-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:3px}
+.step-desc{font-size:12px;color:var(--muted)}
+
+.tip{background:rgba(0,200,255,.05);border:1px solid rgba(0,200,255,.18);border-radius:var(--radius);padding:18px 22px;margin:18px 0;display:flex;gap:12px;align-items:flex-start}
+.tip-icon{font-size:18px;flex-shrink:0;margin-top:2px}
+.tip-text{font-size:13px;color:var(--text);line-height:1.7}
+.tip-text strong{color:var(--accent)}
+
+.cmd{background:#020c1a;border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-family:monospace;font-size:12px;color:#7fdbca;margin:12px 0;white-space:pre;overflow-x:auto}
+
+/* PRINT */
+@media print{
+  nav,.lang-btn,.pdf-btn,footer{display:none!important}
+  body{background:#fff!important;color:#111!important}
+  .content{display:block!important}
+  .hero h1{color:#111!important;font-size:28px}.hero h1 span{color:#0077cc!important}
+  .hero-eyebrow{color:#0077cc!important;background:#e8f4fd!important;border-color:#0077cc!important}
+  .hero p,.stat-label,.muted{color:#555!important}.stat-num{color:#0077cc!important}
+  .sections{padding:0 20px}
+  .section{display:block!important;page-break-before:always}
+  .section:first-child{page-break-before:auto}
+  .section-hero{background:#e8f4fd!important}.section-title{color:#111!important}.section-sub{color:#444!important}
+  .block{background:#f8fbff!important;border-color:#cce4f7!important}.block-title{color:#111!important}
+  .tool-card{background:#fff!important;border-color:#cce4f7!important;break-inside:avoid}
+  .tool-name{color:#111!important}.tool-desc,.step-desc{color:#444!important}.tool-link{color:#0077cc!important}
+  .step-title{color:#111!important}.tip{background:#e8f4fd!important;border-color:#aad4f0!important}
+  .tip-text{color:#222!important}.tip-text strong{color:#0077cc!important}
+  .cmd{background:#f0f4f8!important;color:#1a4a6b!important}
+  .grid2,.grid3{grid-template-columns:1fr 1fr}
+}
+
+footer{border-top:1px solid var(--border);padding:28px 20px;text-align:center;color:var(--muted);font-size:13px}
+@media(max-width:600px){
+  .hero{padding:44px 14px 24px}.sections{padding:0 12px 60px}
+  .section-hero{padding:24px 16px}.section-title{font-size:24px}
+  .grid2,.grid3{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="nav-inner">
+  <div class="brand"><span class="brand-icon">🤖</span><span class="brand-name">AI Playbook</span></div>
+  <button class="tab active" onclick="show(0)"><span>💻</span><span class="tab-label" data-he="פיתוח" data-en="Development">פיתוח</span></button>
+  <button class="tab" onclick="show(1)"><span>🌐</span><span class="tab-label" data-he="בניית אתרים" data-en="Web Dev">בניית אתרים</span></button>
+  <button class="tab" onclick="show(2)"><span>📊</span><span class="tab-label" data-he="מצגות" data-en="Presentations">מצגות</span></button>
+  <button class="tab" onclick="show(3)"><span>🎬</span><span class="tab-label" data-he="סרטונים" data-en="Video">סרטונים</span></button>
+  <button class="tab" onclick="show(4)"><span>✨</span><span class="tab-label" data-he="אנימציה" data-en="Animation">אנימציה</span></button>
+  <button class="tab" onclick="show(5)"><span>🏢</span><span class="tab-label" data-he="ניהול" data-en="Management">ניהול</span></button>
+  <button class="lang-btn" onclick="toggleLang()">English →</button>
+  <button class="pdf-btn" onclick="window.print()" data-he="⬇ הורד PDF" data-en="⬇ Download PDF">⬇ הורד PDF</button>
+</div>
+</nav>
+
+<!-- ═══════════════════════════════ HEBREW ═══════════════════════════════ -->
+<div id="content-he" class="content active">
+<div class="hero">
+  <div class="hero-eyebrow">מדריך מעשי · יוני 2026</div>
+  <h1>דרכי עבודה<br><span>אידיאליות עם AI</span></h1>
+  <p>כלים, מודלים ותהליכים מומלצים לפי תפקיד — מבוססים על מחקר עדכני ושימוש אמיתי.</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">6</span><span class="stat-label">תפקידים</span></div>
+    <div class="stat"><span class="stat-num">30+</span><span class="stat-label">כלים</span></div>
+    <div class="stat"><span class="stat-num">2026</span><span class="stat-label">עדכני</span></div>
+  </div>
+</div>
+<div class="sections">
+
+<div class="section" id="he-s0" style="--current-color:var(--c1)">
+  <div class="section-hero" style="background:var(--c1l)"><div class="section-hero-inner">
+    <span class="section-icon">💻</span>
+    <div class="section-title">פיתוח</div>
+    <div class="section-sub">קוד, סוכנים, אוטומציה — תהליך עבודה שרץ לבד ברקע</div>
+  </div></div>
+  <div class="block">
+    <div class="block-title">הכלי המרכזי — Claude Code</div>
+    <div class="grid2">
+      <div class="tool-card"><div class="tool-name">/goal <span class="badge">מרכזי</span></div><div class="tool-desc">עובד ברקע עד השלמת המשימה — ללא שאלות. מריץ מאות sub-agents במקביל. מוודא תוצאה עם LLM נוסף לפני שמדווח.</div><span class="tool-link">Claude Code → /goal [תאר את המשימה]</span></div>
+      <div class="tool-card"><div class="tool-name">Remote Control</div><div class="tool-desc">גישה מהטלפון לסשן Claude Code פתוח על המחשב. Filesystem, MCP servers והגדרות הפרויקט נשארות מקומיות.</div><span class="tool-link">claude --remote-control --name [שם]</span></div>
+      <div class="tool-card"><div class="tool-name">Dispatch</div><div class="tool-desc">שלח משימה מהטלפון → קלוד מבצע על המחשב שלך. חוזר עם תוצאה מוכנה.</div><span class="tool-link">Cowork > Dispatch בתפריט השמאלי</span></div>
+      <div class="tool-card"><div class="tool-name">CLAUDE.md</div><div class="tool-desc">קובץ שקלוד קורא אוטומטית בכל פרויקט. שמור בו ארכיטקטורה, conventions, כלים — "המוח" של הפרויקט.</div><span class="tool-link">~/.claude/CLAUDE.md (גלובלי)</span></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title">Stack מומלץ</div>
+    <div class="grid3">
+      <div class="tool-card"><div class="tool-name">Hermes Agent</div><div class="tool-desc">Agent על השרת שלך, זוכר הכל, בונה skills בעצמו. MIT, חינמי.</div><span class="tool-link">github.com/nousresearch/hermes-agent</span></div>
+      <div class="tool-card"><div class="tool-name">Boost <span class="badge">JFrog</span></div><div class="tool-desc">מונע מ-agents להיתקע בלופים על CI/CD לוקאלי. חינמי.</div><span class="tool-link">github.com/jfrog/boost</span></div>
+      <div class="tool-card"><div class="tool-name">Composio</div><div class="tool-desc">500+ אינטגרציות (Gmail, Stripe, Slack) בשורת קוד. ⚠️ הגדר הרשאות מינימליות.</div><span class="tool-link">composio.dev</span></div>
+      <div class="tool-card"><div class="tool-name">n8n MCP</div><div class="tool-desc">בנה workflows ב-n8n בשפה טבעית מ-Claude Code. 1,650+ nodes.</div><span class="tool-link">blog.n8n.io/n8n-mcp-server</span></div>
+      <div class="tool-card"><div class="tool-name">caveman</div><div class="tool-desc">חוסך 65% טוקנים בלי לפגוע בדיוק. להפעיל תמיד.</div><span class="tool-link">github.com/JuliusBrussee/caveman</span></div>
+      <div class="tool-card"><div class="tool-name">graphify</div><div class="tool-desc">/graphify הופך קוד ו-docs לגרף ידע שניתן לשאילתה.</div><span class="tool-link">github.com/safishamsi/graphify</span></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title">מודלים חלופיים (זולים)</div>
+    <div class="grid2">
+      <div class="tool-card"><div class="tool-name">GLM-5.2 <span class="badge">MIT</span></div><div class="tool-desc">Open source, 1M context, $12-18/חודש. ~94% מביצועי Claude Opus על קידוד. מאומן על Huawei בלבד.</div><span class="tool-link">z.ai · huggingface.co/zai-org</span></div>
+      <div class="tool-card"><div class="tool-name">Kimi K2.6</div><div class="tool-desc">חינמי לשימוש בסיסי. Agent Swarm עד 300 sub-agents. 15¢ למיליון טוקן ב-API.</div><span class="tool-link">kimi.com</span></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title">תהליך עבודה</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">הגדר CLAUDE.md בפרויקט</div><div class="step-desc">ארכיטקטורה, stack, conventions — מה שקלוד צריך לדעת</div></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">השתמש ב-/goal למשימות מורכבות</div><div class="step-desc">תן לו לרוץ ברקע — תחזור לתוצאה</div></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Boost לפני CI/CD לוקאלי</div><div class="step-desc">מונע לופים שמבזבזים טוקנים</div></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><div class="step-title">Dispatch בבוקר מהטלפון</div><div class="step-desc">שלח בדרך לעבודה → תוצאה מוכנה על הדסקטופ</div></div></div>
+    </div>
+  </div>
+  <div class="tip"><span class="tip-icon">💡</span><div class="tip-text"><strong>/goal שונה מ-/loop:</strong> /loop חוזר על איטרציה, /goal עובד עד שהמשימה <em>מושלמת ומאומתת</em>.</div></div>
+</div>
+
+<div class="section" id="he-s1" style="--current-color:var(--c2)">
+  <div class="section-hero" style="background:var(--c2l)"><div class="section-hero-inner">
+    <span class="section-icon">🌐</span>
+    <div class="section-title">בניית אתרים</div>
+    <div class="section-sub">עיצוב, קוד, אינטגרציות — מהרעיון לפרודקשן</div>
+  </div></div>
+  <div class="block">
+    <div class="block-title">Stack בסיסי</div>
+    <div class="grid2">
+      <div class="tool-card"><div class="tool-name">Next.js + Neon <span class="badge">מומלץ</span></div><div class="tool-desc">ה-default לכל פרויקט. Deploy ב-Render מחובר ל-GitHub. <strong>Neon</strong> לדאטאבייס — PostgreSQL חינמי לגמרי, ללא מגבלת זמן.</div><span class="tool-link">neon.tech · render.com</span></div>
+      <div class="tool-card"><div class="tool-name">CHING <span class="badge">ישראלי</span></div><div class="tool-desc">גבייה מוכנה לSaaS: מנויים, Bit, PayBox, Google/Apple Pay. יש סקיל לקלוד — הטמעה בדקות.</div><span class="tool-link">ching.co.il</span></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title">כלי עיצוב</div>
+    <div class="grid3">
+      <div class="tool-card"><div class="tool-name">design-extract</div><div class="tool-desc">פקודה אחת = מערכת עיצוב מלאה: Figma tokens, Tailwind, shadcn, WCAG.</div><span class="tool-link">github.com/Manavarya09/design-extract</span></div>
+      <div class="tool-card"><div class="tool-name">impeccable</div><div class="tool-desc">23 פקודות שמנקות AI slop. להפעיל לפני כל דמו.</div><span class="tool-link">github.com/pbakaus/impeccable</span></div>
+      <div class="tool-card"><div class="tool-name">open-design</div><div class="tool-desc">19 Skills, 71 מערכות עיצוב. Export ל-HTML/PDF/PPTX/MP4.</div><span class="tool-link">github.com/nexu-io/open-design</span></div>
+    </div>
+  </div>
+  <div class="tip"><span class="tip-icon">💡</span><div class="tip-text"><strong>Neon:</strong> PostgreSQL חינמי לגמרי — ללא מגבלת זמן, ללא צורך בשדרוג. neon.tech, הרשמה חינמית.</div></div>
+</div>
+
+<div class="section" id="he-s2" style="--current-color:var(--c3)">
+  <div class="section-hero" style="background:var(--c3l)"><div class="section-hero-inner">
+    <span class="section-icon">📊</span>
+    <div class="section-title">מצגות</div>
+    <div class="section-sub">מהרעיון לשקף מוגמר — Claude כותב, AI מעצב</div>
+  </div></div>
+  <div class="block">
+    <div class="block-title">Stack מצגות</div>
+    <div class="grid2">
+      <div class="tool-card"><div class="tool-name">NotebookLM <span class="badge">מרכזי</span></div><div class="tool-desc">מייצר מצגות, שאלונים, פודקאסטים ואינפוגרפיקות מתוכן גולמי. חיבור דרך Claude Code.</div><span class="tool-link">notebooklm.google.com · github.com/teng-lin/notebooklm-py</span></div>
+      <div class="tool-card"><div class="tool-name">Gamma</div><div class="tool-desc">הכי מהיר לשקפים יפים מטקסט. Claude כותב outline, Gamma מייצר עיצוב.</div><span class="tool-link">gamma.app</span></div>
+      <div class="tool-card"><div class="tool-name">HyperFrames</div><div class="tool-desc">מצגות אנימטיביות מ-HTML. /hyperframes ב-Claude Code → MP4.</div><span class="tool-link">hyperframes.heygen.com</span></div>
+      <div class="tool-card"><div class="tool-name">open-design</div><div class="tool-desc">Export PPTX עם 71 מערכות עיצוב מוכנות.</div><span class="tool-link">github.com/nexu-io/open-design</span></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title">תהליך</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Claude מסנתז ל-outline</div><div class="step-desc">5-7 נקודות, מסר אחד ברור לכל שקף</div></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">העלה ל-NotebookLM</div><div class="step-desc">בקש "צור מצגת מ-Source זה" → מצגת + שאלון + אינפוגרפיה</div></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">עיצוב ב-Gamma / HyperFrames</div><div class="step-desc">Gamma לסטטי, HyperFrames לאנימטיבי</div></div></div>
+    </div>
+  </div>
+  <div class="tip"><span class="tip-icon">💡</span><div class="tip-text"><strong>טיפ לכנסים:</strong> אותו תוכן → NotebookLM מייצר גם פודקאסט 2-3 דקות לשלוח לפני הכנס.</div></div>
+</div>
+
+<div class="section" id="he-s3" style="--current-color:var(--c4)">
+  <div class="section-hero" style="background:var(--c4l)"><div class="section-hero-inner">
+    <span class="section-icon">🎬</span>
+    <div class="section-title">סרטונים שיווקיים</div>
+    <div class="section-sub">Seedance 2.0 + HyperFrames + /goal — מהפרומפט לקמפיין</div>
+  </div></div>
+  <div class="block">
+    <div class="block-title">Seedance 2.0 — המנוע</div>
+    <div class="tool-card" style="margin-bottom:14px"><div class="tool-name">Seedance 2.0 <span class="badge">ByteDance</span></div><div class="tool-desc">Quad-modal: טקסט + תמונה + וידאו + אודיו בו-זמנית. מייצר עד 2K עם אודיו נייטיב תוך פחות מדקה.</div></div>
+    <div class="grid2">
+      <div class="tool-card"><div class="tool-name">מבנה בסיסי</div><div class="tool-desc">נושא + פעולה + סביבה + מצלמה + סגנון + מגבלות. 60-100 מילה אידיאלי.</div></div>
+      <div class="tool-card"><div class="tool-name">כלל הזהב</div><div class="tool-desc">20-30 המילים הראשונות קובעות הכל — פתח עם מי בפריים ומה הוא עושה.</div></div>
+      <div class="tool-card"><div class="tool-name">מצלמה אחת</div><div class="tool-desc">push-in / pull-out / pan / tracking / orbit / aerial / handheld / fixed. אחת בלבד.</div></div>
+      <div class="tool-card"><div class="tool-name">Negative prompts חובה</div><div class="tool-desc">avoid jitter + avoid bent limbs + avoid temporal flicker. לדמויות: avoid identity drift.</div></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title">Stack</div>
+    <div class="grid3">
+      <div class="tool-card"><div class="tool-name">Higgsfield</div><div class="tool-desc">פלטפורמת הפקה מלאה: Seedance + ElevenLabs + עריכה.</div><span class="tool-link">higgsfield.ai</span></div>
+      <div class="tool-card"><div class="tool-name">HyperFrames</div><div class="tool-desc">Claude כותב HTML → MP4. מושלם לסרטוני מוצר ואינפו.</div><span class="tool-link">hyperframes.heygen.com</span></div>
+      <div class="tool-card"><div class="tool-name">ElevenLabs</div><div class="tool-desc">קריינות AI + Voice Clone. מסנכרן עם Higgsfield.</div><span class="tool-link">elevenlabs.io</span></div>
+    </div>
+  </div>
+  <div class="tip"><span class="tip-icon">🚀</span><div class="tip-text"><strong>/goal לקמפיין שלם:</strong> "צור 10 גרסאות 30 שניות, עברית ואנגלית, בחר Top 3" — קלוד רץ ברקע, אתה חוזר לתוצאות.</div></div>
+</div>
+
+<div class="section" id="he-s4" style="--current-color:var(--c5)">
+  <div class="section-hero" style="background:var(--c5l)"><div class="section-hero-inner">
+    <span class="section-icon">✨</span>
+    <div class="section-title">אנימציה</div>
+    <div class="section-sub">HyperFrames — HTML כשפת וידאו. AI כותב, הדפדפן מרנדר.</div>
+  </div></div>
+  <div class="block">
+    <div class="block-title">HyperFrames</div>
+    <div class="tool-card" style="margin-bottom:14px"><div class="tool-name">HyperFrames <span class="badge">HeyGen · Open Source</span></div><div class="tool-desc">כותבים HTML/CSS → מקבלים MP4. Deterministic: אותו input = אותו output. מושלם לאוטומציה.</div><span class="tool-link">github.com/heygen-com/hyperframes · hyperframes.heygen.com</span></div>
+    <div class="cmd">npx skills add heygen-com/hyperframes   # התקנה ב-Claude Code
+/hyperframes                              # שימוש בשיחה</div>
+  </div>
+  <div class="block">
+    <div class="block-title">תהליך לפי סוג</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">🎨</div><div class="step-content"><div class="step-title">לוגו / כותרת פשוטה</div><div class="step-desc">HyperFrames + CSS animation → /hyperframes → MP4</div></div></div>
+      <div class="step"><div class="step-num">🎭</div><div class="step-content"><div class="step-title">Story / נרטיב</div><div class="step-desc">HyperFrames + GSAP timeline — תאר כוריאוגרפיה beat by beat</div></div></div>
+      <div class="step"><div class="step-num">🌊</div><div class="step-content"><div class="step-title">תנועה אורגנית / דמויות</div><div class="step-desc">Seedance 2.0 + reference video. לריאליזם: "no 3D, no cartoon"</div></div></div>
+      <div class="step"><div class="step-num">📊</div><div class="step-content"><div class="step-title">אינפוגרפיקה</div><div class="step-desc">Text to Lottie → ייבא ל-HyperFrames → MP4 עם מספרים חיים</div></div></div>
+    </div>
+  </div>
+  <div class="tip"><span class="tip-icon">⚡</span><div class="tip-text"><strong>יתרון מרכזי:</strong> Deterministic — אפשר לגנרט מאות גרסאות אוטומטית (צבעים, שפות, מותגים) בלי לגעת בכל אחת.</div></div>
+</div>
+
+<div class="section" id="he-s5" style="--current-color:var(--c6)">
+  <div class="section-hero" style="background:var(--c6l)"><div class="section-hero-inner">
+    <span class="section-icon">🏢</span>
+    <div class="section-title">ניהול</div>
+    <div class="section-sub">Company Brain + אוטומציה + קבלת החלטות מבוססות ידע</div>
+  </div></div>
+  <div class="block">
+    <div class="block-title">Company Brain — התשתית</div>
+    <div class="tool-card" style="margin-bottom:14px"><div class="tool-name">Company Brain <span class="badge">YC Endorsed</span></div><div class="tool-desc">לא wiki, לא חיפוש — "מפה חיה של איך החברה עובדת": החזרות, חריגות מחיר, תגובה לאירועים. כל agent ניזון ממנו.</div><span class="tool-link">company-brain.ai (חינמי, MCP connector)</span></div>
+    <div class="grid2">
+      <div class="tool-card"><div class="tool-name">Context (CLAUDE.md)</div><div class="tool-desc">מי אתה, מה העסק, מבנה תיקיות, חוקי עבודה — ה-Router של כל ה-AI שלך.</div></div>
+      <div class="tool-card"><div class="tool-name">Connections (MCP)</div><div class="tool-desc">חיבורי API: יומן, מייל, Slack, כלי ניהול — זרימת מידע חיה.</div></div>
+      <div class="tool-card"><div class="tool-name">Capabilities (Skills)</div><div class="tool-desc">/capture לקליטת מקורות, /sync לעדכון Wiki, /lint לבדיקה שבועית.</div></div>
+      <div class="tool-card"><div class="tool-name">Context Discipline</div><div class="tool-desc">סשן נפרד לכל סוג משימה: מחקר / טיוטה / ביצוע.</div></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title">כלים</div>
+    <div class="grid3">
+      <div class="tool-card"><div class="tool-name">Obsidian</div><div class="tool-desc">PKM מקומי, Markdown, קישורים דו-כיווניים, graph view. המקום ל-Wiki הארגוני. חינמי.</div><span class="tool-link">obsidian.md</span></div>
+      <div class="tool-card"><div class="tool-name">Microsoft Scout</div><div class="tool-desc">Always-on agent ב-Microsoft 365. מתזמן, מכין חומרים, מזהה סיכונים. בנוי על OpenClaw.</div></div>
+      <div class="tool-card"><div class="tool-name">Globster</div><div class="tool-desc">Monday.com's OpenClaw. One-click agent ב-2 דקות. $23/חודש.</div><span class="tool-link">globster.ai</span></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title">תמלולי פגישות → מאגר ידע</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Capture</div><div class="step-desc">Spinach AI / Otter — להקליט כל פגישה שחשובה לעסק</div></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Classify</div><div class="step-desc">3-5 קטגוריות קבועות — הקטגוריה היא המפתח, לא תגים</div></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Extract</div><div class="step-desc">3 שאלות: מה התחייבנו? איזו התנגדות? מה שווה לשמור?</div></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><div class="step-title">Feed</div><div class="step-desc">כל agent עתידי ניזון מהמאגר — לא מ-RAG חוזרות</div></div></div>
+    </div>
+  </div>
+  <div class="tip"><span class="tip-icon">🧠</span><div class="tip-text"><strong>עיקרון:</strong> AI טוב כמו הידע שיש לו. Company Brain לפני כל כלי אחר.</div></div>
+</div>
+
+</div><!-- /sections he -->
+</div><!-- /content-he -->
+
+<!-- ═══════════════════════════════ ENGLISH ═══════════════════════════════ -->
+<div id="content-en" class="content">
+<div class="hero">
+  <div class="hero-eyebrow">Practical Guide · June 2026</div>
+  <h1>Ideal AI<br><span>Work Methods</span></h1>
+  <p>Tools, models, and recommended workflows by role — based on current research and real usage.</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">6</span><span class="stat-label">Roles</span></div>
+    <div class="stat"><span class="stat-num">30+</span><span class="stat-label">Tools</span></div>
+    <div class="stat"><span class="stat-num">2026</span><span class="stat-label">Current</span></div>
+  </div>
+</div>
+<div class="sections">
+
+<div class="section" id="en-s0" style="--current-color:var(--c1)">
+  <div class="section-hero" style="background:var(--c1l)"><div class="section-hero-inner">
+    <span class="section-icon">💻</span>
+    <div class="section-title">Development</div>
+    <div class="section-sub">Code, agents, automation — workflows that run themselves</div>
+  </div></div>
+  <div class="block">
+    <div class="block-title">Core Tool — Claude Code</div>
+    <div class="grid2">
+      <div class="tool-card"><div class="tool-name">/goal <span class="badge">Primary</span></div><div class="tool-desc">Works in background until the task is complete — no questions. Runs hundreds of sub-agents in parallel. Verifies with a second LLM before reporting back.</div><span class="tool-link">Claude Code → /goal [describe the task]</span></div>
+      <div class="tool-card"><div class="tool-name">Remote Control</div><div class="tool-desc">Access Claude Code from your phone. Full local environment: filesystem, MCP servers, project config all stay on your machine.</div><span class="tool-link">claude --remote-control --name [name]</span></div>
+      <div class="tool-card"><div class="tool-name">Dispatch</div><div class="tool-desc">Send a task from your phone → Claude executes on your desktop. Returns with a ready result.</div><span class="tool-link">Cowork > Dispatch in the left sidebar</span></div>
+      <div class="tool-card"><div class="tool-name">CLAUDE.md</div><div class="tool-desc">File Claude reads automatically in every project. Store architecture, conventions, tools — the project "brain".</div><span class="tool-link">~/.claude/CLAUDE.md (global)</span></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title">Recommended Stack</div>
+    <div class="grid3">
+      <div class="tool-card"><div class="tool-name">Hermes Agent</div><div class="tool-desc">Runs on your server, remembers everything, builds skills on its own. MIT, free.</div><span class="tool-link">github.com/nousresearch/hermes-agent</span></div>
+      <div class="tool-card"><div class="tool-name">Boost <span class="badge">JFrog</span></div><div class="tool-desc">Prevents agents from looping on slow local CI/CD. Saved thousands in tokens at JFrog. Free.</div><span class="tool-link">github.com/jfrog/boost</span></div>
+      <div class="tool-card"><div class="tool-name">Composio</div><div class="tool-desc">500+ integrations in one line of code. ⚠️ Always set minimal permissions per agent.</div><span class="tool-link">composio.dev</span></div>
+      <div class="tool-card"><div class="tool-name">n8n MCP</div><div class="tool-desc">Build n8n workflows in plain language from Claude Code. 1,650+ nodes.</div><span class="tool-link">blog.n8n.io/n8n-mcp-server</span></div>
+      <div class="tool-card"><div class="tool-name">caveman</div><div class="tool-desc">Saves 65% tokens with no accuracy loss. Always on.</div><span class="tool-link">github.com/JuliusBrussee/caveman</span></div>
+      <div class="tool-card"><div class="tool-name">graphify</div><div class="tool-desc">/graphify turns code and docs into a queryable knowledge graph.</div><span class="tool-link">github.com/safishamsi/graphify</span></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title">Alternative Models (Cost-Efficient)</div>
+    <div class="grid2">
+      <div class="tool-card"><div class="tool-name">GLM-5.2 <span class="badge">MIT</span></div><div class="tool-desc">Open source, 1M context, $12-18/month. ~94% of Claude Opus coding performance. Trained entirely on Huawei chips.</div><span class="tool-link">z.ai · huggingface.co/zai-org</span></div>
+      <div class="tool-card"><div class="tool-name">Kimi K2.6</div><div class="tool-desc">Free for basic use. Agent Swarm up to 300 sub-agents. $0.15 per million tokens via API.</div><span class="tool-link">kimi.com</span></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title">Workflow</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Define CLAUDE.md in every project</div><div class="step-desc">Architecture, stack, conventions — what Claude always needs to know</div></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Use /goal for complex tasks</div><div class="step-desc">Let it run in background — come back to results</div></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Enable Boost before local CI/CD</div><div class="step-desc">Prevents infinite loops that burn tokens</div></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><div class="step-title">Use Dispatch in the morning from your phone</div><div class="step-desc">Send task on the way in → finished work on the desktop</div></div></div>
+    </div>
+  </div>
+  <div class="tip"><span class="tip-icon">💡</span><div class="tip-text"><strong>/goal vs /loop:</strong> /loop repeats an iteration. /goal works until the task is <em>complete and verified</em>.</div></div>
+</div>
+
+<div class="section" id="en-s1" style="--current-color:var(--c2)">
+  <div class="section-hero" style="background:var(--c2l)"><div class="section-hero-inner">
+    <span class="section-icon">🌐</span>
+    <div class="section-title">Web Development</div>
+    <div class="section-sub">Design, code, integrations — from idea to production</div>
+  </div></div>
+  <div class="block">
+    <div class="block-title">Base Stack</div>
+    <div class="grid2">
+      <div class="tool-card"><div class="tool-name">Next.js + Neon <span class="badge">Recommended</span></div><div class="tool-desc">Default for every project. Deploy on Render with GitHub auto-deploy. <strong>Neon</strong> for DB — completely free PostgreSQL, no time limit, no credit card.</div><span class="tool-link">neon.tech · render.com</span></div>
+      <div class="tool-card"><div class="tool-name">CHING</div><div class="tool-desc">Ready-made billing for Israeli SaaS: subscriptions, Bit, PayBox, Google/Apple Pay. Claude skill — integrates in minutes.</div><span class="tool-link">ching.co.il</span></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title">Design Tools</div>
+    <div class="grid3">
+      <div class="tool-card"><div class="tool-name">design-extract</div><div class="tool-desc">One command = full design system: Figma tokens, Tailwind, shadcn, WCAG audit.</div><span class="tool-link">github.com/Manavarya09/design-extract</span></div>
+      <div class="tool-card"><div class="tool-name">impeccable</div><div class="tool-desc">23 commands to clean AI slop. Run before every demo.</div><span class="tool-link">github.com/pbakaus/impeccable</span></div>
+      <div class="tool-card"><div class="tool-name">open-design</div><div class="tool-desc">19 Skills, 71 design systems. Export to HTML/PDF/PPTX/MP4.</div><span class="tool-link">github.com/nexu-io/open-design</span></div>
+    </div>
+  </div>
+  <div class="tip"><span class="tip-icon">💡</span><div class="tip-text"><strong>Neon:</strong> Completely free PostgreSQL — no time limit, no forced upgrade. neon.tech, free signup.</div></div>
+</div>
+
+<div class="section" id="en-s2" style="--current-color:var(--c3)">
+  <div class="section-hero" style="background:var(--c3l)"><div class="section-hero-inner">
+    <span class="section-icon">📊</span>
+    <div class="section-title">Presentations</div>
+    <div class="section-sub">From idea to finished slide — Claude writes, AI designs</div>
+  </div></div>
+  <div class="block">
+    <div class="block-title">Presentation Stack</div>
+    <div class="grid2">
+      <div class="tool-card"><div class="tool-name">NotebookLM <span class="badge">Core</span></div><div class="tool-desc">Generates presentations, quizzes, podcasts, infographics from raw content. Connect via Claude Code.</div><span class="tool-link">notebooklm.google.com · github.com/teng-lin/notebooklm-py</span></div>
+      <div class="tool-card"><div class="tool-name">Gamma</div><div class="tool-desc">Fastest route from text to beautiful slides. Claude writes outline, Gamma generates design.</div><span class="tool-link">gamma.app</span></div>
+      <div class="tool-card"><div class="tool-name">HyperFrames</div><div class="tool-desc">Animated presentations from HTML. /hyperframes in Claude Code → MP4.</div><span class="tool-link">hyperframes.heygen.com</span></div>
+      <div class="tool-card"><div class="tool-name">open-design</div><div class="tool-desc">PPTX export with 71 ready design systems.</div><span class="tool-link">github.com/nexu-io/open-design</span></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title">Workflow</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Claude synthesizes to outline</div><div class="step-desc">5–7 key points, one clear message per slide</div></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Upload to NotebookLM as source</div><div class="step-desc">Request "create a presentation" → slides + quiz + infographic</div></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Design in Gamma or HyperFrames</div><div class="step-desc">Gamma for static, HyperFrames for animated</div></div></div>
+    </div>
+  </div>
+  <div class="tip"><span class="tip-icon">💡</span><div class="tip-text"><strong>Conference tip:</strong> NotebookLM can also generate a 2–3 min podcast from the same content — send as a pre-event teaser.</div></div>
+</div>
+
+<div class="section" id="en-s3" style="--current-color:var(--c4)">
+  <div class="section-hero" style="background:var(--c4l)"><div class="section-hero-inner">
+    <span class="section-icon">🎬</span>
+    <div class="section-title">Marketing Videos</div>
+    <div class="section-sub">Seedance 2.0 + HyperFrames + /goal — from prompt to campaign</div>
+  </div></div>
+  <div class="block">
+    <div class="block-title">Seedance 2.0 — Core Engine</div>
+    <div class="tool-card" style="margin-bottom:14px"><div class="tool-name">Seedance 2.0 <span class="badge">ByteDance</span></div><div class="tool-desc">Quad-modal: text + image + video + audio simultaneously. Generates up to 2K with native audio in under a minute.</div></div>
+    <div class="grid2">
+      <div class="tool-card"><div class="tool-name">Basic structure</div><div class="tool-desc">Subject + Action + Environment + Camera + Style + Constraints. 60–100 words ideal.</div></div>
+      <div class="tool-card"><div class="tool-name">Golden rule</div><div class="tool-desc">First 20–30 words decide everything. Open with who is in frame and what they're doing.</div></div>
+      <div class="tool-card"><div class="tool-name">One camera move</div><div class="tool-desc">push-in / pull-out / pan / tracking / orbit / aerial / handheld / fixed. One only.</div></div>
+      <div class="tool-card"><div class="tool-name">Negative prompts (required)</div><div class="tool-desc">avoid jitter + avoid bent limbs + avoid temporal flicker. Characters: avoid identity drift.</div></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title">Stack</div>
+    <div class="grid3">
+      <div class="tool-card"><div class="tool-name">Higgsfield</div><div class="tool-desc">Full production: Seedance + ElevenLabs + editing.</div><span class="tool-link">higgsfield.ai</span></div>
+      <div class="tool-card"><div class="tool-name">HyperFrames</div><div class="tool-desc">Claude writes HTML → MP4. Product videos, infographics.</div><span class="tool-link">hyperframes.heygen.com</span></div>
+      <div class="tool-card"><div class="tool-name">ElevenLabs</div><div class="tool-desc">AI voiceover + Voice Clone. Auto-syncs with Higgsfield.</div><span class="tool-link">elevenlabs.io</span></div>
+    </div>
+  </div>
+  <div class="tip"><span class="tip-icon">🚀</span><div class="tip-text"><strong>/goal for a full campaign:</strong> "Create 10 versions, 30 seconds, English and Hebrew, pick Top 3" — Claude runs in background, you return to results.</div></div>
+</div>
+
+<div class="section" id="en-s4" style="--current-color:var(--c5)">
+  <div class="section-hero" style="background:var(--c5l)"><div class="section-hero-inner">
+    <span class="section-icon">✨</span>
+    <div class="section-title">Animation</div>
+    <div class="section-sub">HyperFrames — HTML as video language. AI writes, browser renders.</div>
+  </div></div>
+  <div class="block">
+    <div class="block-title">HyperFrames</div>
+    <div class="tool-card" style="margin-bottom:14px"><div class="tool-name">HyperFrames <span class="badge">HeyGen · Open Source</span></div><div class="tool-desc">Write HTML/CSS → get MP4. Deterministic: same input = same output. Perfect for automation and CI/CD. Apache 2.0, no rendering fees.</div><span class="tool-link">github.com/heygen-com/hyperframes</span></div>
+    <div class="cmd">npx skills add heygen-com/hyperframes   # install in Claude Code
+/hyperframes                              # use in conversation</div>
+  </div>
+  <div class="block">
+    <div class="block-title">Workflow by Type</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">🎨</div><div class="step-content"><div class="step-title">Logo / Title / Simple UI</div><div class="step-desc">HyperFrames + CSS animation → /hyperframes → MP4</div></div></div>
+      <div class="step"><div class="step-num">🎭</div><div class="step-content"><div class="step-title">Story / Complex Narrative</div><div class="step-desc">HyperFrames + GSAP timeline — describe choreography beat by beat</div></div></div>
+      <div class="step"><div class="step-num">🌊</div><div class="step-content"><div class="step-title">Organic Motion / Characters</div><div class="step-desc">Seedance 2.0 + reference video. For realism: "no 3D, no cartoon"</div></div></div>
+      <div class="step"><div class="step-num">📊</div><div class="step-content"><div class="step-title">Infographic / Data Viz</div><div class="step-desc">Text to Lottie → import to HyperFrames → MP4 with live numbers</div></div></div>
+    </div>
+  </div>
+  <div class="tip"><span class="tip-icon">⚡</span><div class="tip-text"><strong>Key advantage:</strong> Deterministic — generate hundreds of variants automatically (colors, languages, brands) without touching each one.</div></div>
+</div>
+
+<div class="section" id="en-s5" style="--current-color:var(--c6)">
+  <div class="section-hero" style="background:var(--c6l)"><div class="section-hero-inner">
+    <span class="section-icon">🏢</span>
+    <div class="section-title">Management</div>
+    <div class="section-sub">Company Brain + automation + knowledge-based decisions</div>
+  </div></div>
+  <div class="block">
+    <div class="block-title">Company Brain — The Foundation</div>
+    <div class="tool-card" style="margin-bottom:14px"><div class="tool-name">Company Brain <span class="badge">YC Endorsed</span></div><div class="tool-desc">Not a wiki, not search — "a living map of how the company works": refunds, pricing exceptions, incident response. Every agent you run feeds from it.</div><span class="tool-link">company-brain.ai (free, MCP connector)</span></div>
+    <div class="grid2">
+      <div class="tool-card"><div class="tool-name">Context (CLAUDE.md)</div><div class="tool-desc">Who you are, what the business does, folder structure, work rules — the Router for all your AI.</div></div>
+      <div class="tool-card"><div class="tool-name">Connections (MCP)</div><div class="tool-desc">API connections: calendar, email, Slack, project tools — live information flow.</div></div>
+      <div class="tool-card"><div class="tool-name">Capabilities (Skills)</div><div class="tool-desc">/capture for intake, /sync to update Wiki, /lint for weekly consistency check.</div></div>
+      <div class="tool-card"><div class="tool-name">Context Discipline</div><div class="tool-desc">Separate session per task type: research / draft / execute. Don't mix.</div></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title">Tools</div>
+    <div class="grid3">
+      <div class="tool-card"><div class="tool-name">Obsidian</div><div class="tool-desc">Local PKM, Markdown, bidirectional links, graph view. Home for your organizational Wiki. Free.</div><span class="tool-link">obsidian.md</span></div>
+      <div class="tool-card"><div class="tool-name">Microsoft Scout</div><div class="tool-desc">Always-on agent in Microsoft 365. Schedules, prepares materials, flags risks. Built on OpenClaw.</div></div>
+      <div class="tool-card"><div class="tool-name">Globster</div><div class="tool-desc">Monday.com's OpenClaw. One-click agent in 2 minutes. $23/month.</div><span class="tool-link">globster.ai</span></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="block-title">Meeting Transcripts → Knowledge Base</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Capture</div><div class="step-desc">Spinach AI / Otter — record every meeting that matters</div></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Classify</div><div class="step-desc">3–5 fixed categories — the category is the key, not tags</div></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Extract</div><div class="step-desc">3 questions: What did we commit to? What objection came up? What's worth keeping?</div></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><div class="step-title">Feed</div><div class="step-desc">Every future agent feeds from this base — not from repeated RAG</div></div></div>
+    </div>
+  </div>
+  <div class="tip"><span class="tip-icon">🧠</span><div class="tip-text"><strong>Principle:</strong> AI is only as good as the knowledge it has. Build Company Brain before deploying other tools.</div></div>
+</div>
+
+</div><!-- /sections en -->
+</div><!-- /content-en -->
+
+<footer><div style="max-width:1100px;margin:0 auto">
+  <p>Based on current research · June 2026</p>
+  <p style="margin-top:6px;opacity:.6">To update: "let's reorganize" in your Claude conversation</p>
+</div></footer>
+
+<script>
+const colors=['var(--c1)','var(--c2)','var(--c3)','var(--c4)','var(--c5)','var(--c6)'];
+const tabs=document.querySelectorAll('.tab');
+const navInner=document.querySelector('.nav-inner');
+let lang='he';
+let activeIdx=0;
+
+function centerTab(tab){tab.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})}
+
+function setActive(i){
+  activeIdx=i;
+  tabs.forEach((t,j)=>{t.classList.toggle('active',j===i);t.style.setProperty('--current-color',colors[j])});
+  document.documentElement.style.setProperty('--current-color',colors[i]);
+  centerTab(tabs[i]);
+}
+
+function show(i){
+  setActive(i);
+  const prefix=lang==='he'?'he':'en';
+  const target=document.getElementById(prefix+'-s'+i);
+  if(!target)return;
+  const navH=navInner.closest('nav').offsetHeight;
+  window.scrollTo({top:target.getBoundingClientRect().top+window.scrollY-navH-20,behavior:'smooth'});
+}
+
+function toggleLang(){
+  lang=lang==='he'?'en':'he';
+  const root=document.getElementById('root');
+  root.dir=lang==='he'?'rtl':'ltr';
+  root.lang=lang;
+  document.body.classList.toggle('ltr',lang==='en');
+  document.getElementById('content-he').classList.toggle('active',lang==='he');
+  document.getElementById('content-en').classList.toggle('active',lang==='en');
+  // Update tab labels
+  document.querySelectorAll('.tab-label').forEach(el=>{el.textContent=el.dataset[lang]});
+  // Update lang button
+  document.querySelector('.lang-btn').textContent=lang==='he'?'English →':'← עברית';
+  // Update pdf button
+  const pdfBtn=document.querySelector('.pdf-btn');
+  pdfBtn.textContent=pdfBtn.dataset[lang];
+  localStorage.setItem('lang',lang);
+  // Scroll to current section in new language
+  setTimeout(()=>show(activeIdx),100);
+}
+
+// Intersection observer per language
+function setupObserver(prefix){
+  const sects=document.querySelectorAll(`[id^="${prefix}-s"]`);
+  const obs=new IntersectionObserver((entries)=>{
+    if(lang!==prefix)return;
+    let best=null,bestR=0;
+    entries.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>bestR){bestR=e.intersectionRatio;best=e.target}});
+    if(best){const i=parseInt(best.id.split('-s')[1]);if(!isNaN(i))setActive(i)}
+  },{threshold:[0.15,0.3,0.5],rootMargin:'-60px 0px -30% 0px'});
+  sects.forEach(s=>obs.observe(s));
+}
+setupObserver('he');
+setupObserver('en');
+
+// Restore saved language
+const saved=localStorage.getItem('lang');
+if(saved&&saved!=='he')toggleLang();
+else setActive(0);
+</script>
+</body>
+</html>
